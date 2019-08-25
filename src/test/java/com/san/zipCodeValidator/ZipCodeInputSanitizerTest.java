@@ -17,15 +17,15 @@ import org.junit.jupiter.api.BeforeEach;
  */
 public class ZipCodeInputSanitizerTest {
 
-	List<Integer[]> zipCodeArrayList;
+	List<Integer[]> zipCodeRangeArrayList;
 
 	@BeforeEach
 	void initializeTestData() {
-		zipCodeArrayList = new ArrayList<>();
+		zipCodeRangeArrayList = new ArrayList<>();
 
-		zipCodeArrayList.add(new Integer[] { 2, 4 });
-		zipCodeArrayList.add(new Integer[] { 5, 5 });
-		zipCodeArrayList.add(new Integer[] { 10, 12 });
+		zipCodeRangeArrayList.add(new Integer[] { 2, 4 });
+		zipCodeRangeArrayList.add(new Integer[] { 5, 5 });
+		zipCodeRangeArrayList.add(new Integer[] { 10, 12 });
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class ZipCodeInputSanitizerTest {
 		expected.add(new Integer[] { 5, 5 });
 		expected.add(new Integer[] { 10, 12 });
 
-		List<Integer[]> result = ZipCodeInputSanitizer.sanitize(zipCodeArrayList);
+		List<Integer[]> result = ZipCodeInputSanitizer.sanitize(zipCodeRangeArrayList);
 
 		Assertions.assertArrayEquals(result.toArray(), expected.toArray());
 	}
@@ -50,14 +50,14 @@ public class ZipCodeInputSanitizerTest {
 	 */
 	@Test
 	void testBeforeIntersection() {
-		zipCodeArrayList.add(new Integer[] { 8, 10 });
+		zipCodeRangeArrayList.add(new Integer[] { 8, 10 });
 
 		List<Integer[]> expected = new ArrayList<>();
 		expected.add(new Integer[] { 2, 4 });
 		expected.add(new Integer[] { 5, 5 });
 		expected.add(new Integer[] { 8, 12 });
 
-		List<Integer[]> result = ZipCodeInputSanitizer.sanitize(zipCodeArrayList);
+		List<Integer[]> result = ZipCodeInputSanitizer.sanitize(zipCodeRangeArrayList);
 
 		Assertions.assertArrayEquals(result.toArray(), expected.toArray());
 	}
@@ -68,14 +68,14 @@ public class ZipCodeInputSanitizerTest {
 	 */
 	@Test
 	void testAfterIntersection() {
-		zipCodeArrayList.add(new Integer[] { 5, 7 });
+		zipCodeRangeArrayList.add(new Integer[] { 5, 7 });
 
 		List<Integer[]> expected = new ArrayList<>();
 		expected.add(new Integer[] { 2, 4 });
 		expected.add(new Integer[] { 5, 7 });
 		expected.add(new Integer[] { 10, 12 });
 
-		List<Integer[]> result = ZipCodeInputSanitizer.sanitize(zipCodeArrayList);
+		List<Integer[]> result = ZipCodeInputSanitizer.sanitize(zipCodeRangeArrayList);
 
 		Assertions.assertArrayEquals(result.toArray(), expected.toArray());
 	}
@@ -86,13 +86,13 @@ public class ZipCodeInputSanitizerTest {
 	 */
 	@Test
 	void testMergeIntermediate() {
-		zipCodeArrayList.add(new Integer[] { 4, 5 });
+		zipCodeRangeArrayList.add(new Integer[] { 4, 5 });
 
 		List<Integer[]> expected = new ArrayList<>();
 		expected.add(new Integer[] { 2, 5 });
 		expected.add(new Integer[] { 10, 12 });
 
-		List<Integer[]> result = ZipCodeInputSanitizer.sanitize(zipCodeArrayList);
+		List<Integer[]> result = ZipCodeInputSanitizer.sanitize(zipCodeRangeArrayList);
 
 		Assertions.assertArrayEquals(result.toArray(), expected.toArray());
 	}
@@ -102,13 +102,13 @@ public class ZipCodeInputSanitizerTest {
 	 * Output: [2,12]
 	 */
 	void testMergeAll() {
-		zipCodeArrayList.add(new Integer[] { 4, 5 });
-		zipCodeArrayList.add(new Integer[] { 5, 10 });
+		zipCodeRangeArrayList.add(new Integer[] { 4, 5 });
+		zipCodeRangeArrayList.add(new Integer[] { 5, 10 });
 
 		List<Integer[]> expected = new ArrayList<>();
 		expected.add(new Integer[] { 2, 12 });
 
-		List<Integer[]> result = ZipCodeInputSanitizer.sanitize(zipCodeArrayList);
+		List<Integer[]> result = ZipCodeInputSanitizer.sanitize(zipCodeRangeArrayList);
 
 		Assertions.assertArrayEquals(result.toArray(), expected.toArray());
 	}
@@ -119,10 +119,10 @@ public class ZipCodeInputSanitizerTest {
 	 */
 	@Test
 	void testFailWithEmptyInput() {
-		zipCodeArrayList = null;
+		zipCodeRangeArrayList = null;
 
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			ZipCodeInputSanitizer.sanitize(zipCodeArrayList);
+			ZipCodeInputSanitizer.sanitize(zipCodeRangeArrayList);
 		});
 	}
 }

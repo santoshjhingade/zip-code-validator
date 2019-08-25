@@ -21,14 +21,14 @@ public class ZipCodeInputSanitizerRunner {
             
             String[] zipCodeRanges = zipCodeString.split(";");
             
-            List<Integer[]> zipCodeArrayList = new ArrayList<>();
+            List<Integer[]> zipCodeRangeList = new ArrayList<>();
             
             for(String range: zipCodeRanges) {
-            	String[] zipCode = range.split("-");
-            	zipCodeArrayList.add(new Integer[] { Integer.parseInt(zipCode[0]), Integer.parseInt(zipCode[1]) });
+            	String[] zipCodeRangeArray = range.split("-");
+            	zipCodeRangeList.add(new Integer[] { Integer.parseInt(zipCodeRangeArray[0]), Integer.parseInt(zipCodeRangeArray[1]) });
             }
              
-            ZipCodeInputSanitizer.sanitize(zipCodeArrayList);
+            ZipCodeInputSanitizer.sanitize(zipCodeRangeList);
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }

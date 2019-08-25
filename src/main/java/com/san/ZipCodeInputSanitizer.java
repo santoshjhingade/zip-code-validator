@@ -16,40 +16,42 @@ public class ZipCodeInputSanitizer {
 	private static final Logger LOGGER = Logger.getLogger("ZipCodeInputSanitizer");
 
 	/**
-	 * Method that takes in an array of zipcodes and returns a new List containing
-	 * dedupicated zipcodes
+	 * Method that takes in an array of zipcode ranges and returns a new List containing
+	 * dedupicated zipcode ranges
 	 * 
-	 * @param zipCodeArrayList
+	 * @param zipCodeRangeList
 	 * @return List<Integer[]>
 	 */
-	public static List<Integer[]> sanitize(List<Integer[]> zipCodeArrayList) {
+	public static List<Integer[]> sanitize(List<Integer[]> zipCodeRangeList) {
 
-		List<Integer[]> finalZipCodeList;
+		List<Integer[]> finalZipCodeRangeList;
 
-		if (zipCodeArrayList == null || zipCodeArrayList.isEmpty()) {
+		if (zipCodeRangeList == null || zipCodeRangeList.isEmpty()) {
 			String errorMsg = "Input zipcode array list is null or empty";
 			LOGGER.warning(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
 		}
 
-		if (zipCodeArrayList.size() == 1) {
-			// Return input as is if list contains only one set of zipcodes
-			finalZipCodeList = zipCodeArrayList;
+		logArray("Input: ", zipCodeRangeList);
+		
+		if (zipCodeRangeList.size() == 1) {
+			// Return input as is if list contains only one set of zipcode ranges
+			finalZipCodeRangeList = zipCodeRangeList;
 		} else {
 			// Sanitize input if list has greater than one entry
-			finalZipCodeList = new ArrayList<>();
+			finalZipCodeRangeList = new ArrayList<>();
 
-			// Sort input arraylist based on the starting zipcode in each entry
-			Collections.sort(zipCodeArrayList, (s1, s2) -> {
+			// Sort input list based on the starting zipcode in each range
+			Collections.sort(zipCodeRangeList, (s1, s2) -> {
 				return s1[0].compareTo(s2[0]);
 			});
 
-			logArray("Sorted List: ", zipCodeArrayList);
+			logArray("Sorted List: ", zipCodeRangeList);
 
-			int start = zipCodeArrayList.get(0)[0];
-			int end = zipCodeArrayList.get(0)[1];
+			int start = zipCodeRangeList.get(0)[0];
+			int end = zipCodeRangeList.get(0)[1];
 
-			Iterator<Integer[]> it = zipCodeArrayList.iterator();
+			Iterator<Integer[]> it = zipCodeRangeList.iterator();
 			while (it.hasNext()) {
 
 				Integer[] next = it.next();
@@ -66,7 +68,7 @@ public class ZipCodeInputSanitizer {
 				} else {
 					// Next start is greater than current range, store current range and reset start
 
-					finalZipCodeList.add(new Integer[] { start, end });
+					finalZipCodeRangeList.add(new Integer[] { start, end });
 
 					start = newStart;
 					end = newEnd;
@@ -74,15 +76,15 @@ public class ZipCodeInputSanitizer {
 
 				// Add the last zip code range to the result list
 				if (!it.hasNext()) {
-					finalZipCodeList.add(new Integer[] { start, end });
+					finalZipCodeRangeList.add(new Integer[] { start, end });
 				}
 			}
 
-			logArray("Result: ", finalZipCodeList);
+			logArray("Result: ", finalZipCodeRangeList);
 
 		}
 
-		return finalZipCodeList;
+		return finalZipCodeRangeList;
 	}
 
 	/**
